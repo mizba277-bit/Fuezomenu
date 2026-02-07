@@ -3,88 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8CC63E">
+    <meta name="description" content="Belgo Premium Dessert Lounge - Experience the finest desserts. Order online via WhatsApp.">
     <meta name="google-site-verification" content="lsYRoTtttUw4RFypHTdc21V7gxH6-pVUeTT6EHaCB0o" />
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Belgo Menu">
+
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg viewBox='0 0 36 36' xmlns='http://www.w3.org/2000/svg' fill='%23000000'><path fill='%238CC63E' d='M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z'></path><path fill='white' d='M10.498 9.249c0-1.488 1.023-2.325 2.449-2.325H18.9c3.224 0 5.83 2.17 5.83 5.457c0 2.17-.9 3.628-2.885 4.558v.062c2.637.372 4.713 2.573 4.713 5.271c0 4.372-2.914 6.729-7.193 6.729h-6.386c-1.427 0-2.481-.899-2.481-2.356V9.249zm4.651 6.418h2.419c1.519 0 2.511-.899 2.511-2.45c0-1.457-1.147-2.201-2.511-2.201h-2.419v4.651zm0 9.24h3.659c1.674 0 2.915-.961 2.915-2.697c0-1.458-1.117-2.45-3.287-2.45h-3.287v5.147z'></path></svg>">
 
-    <title>Belgo | Premium Dessert Lounge</title>
+    <title>Belgo | Premium Dessert Lounge | Best Desserts</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+    
     <style>
         :root { --belgo: #8CC63E; --bg-light: #f1f8e9; --white: #ffffff; --text-dark: #2d3436; }
-        body { font-family: 'Poppins', sans-serif; background: var(--belgo); margin: 0; padding-bottom: 120px; color: var(--white); overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background: var(--belgo); margin: 0; padding-bottom: 120px; color: var(--white); overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         
-        /* Header & Logo */
-        header { padding: 35px 15px 10px; text-align: center; }
-        .logo-img { height: 100px; width: auto; filter: brightness(0) invert(1); object-fit: contain; }
+        header { padding: 35px 15px 10px; text-align: center; min-height: 100px; }
+        .logo-img { height: 100px; width: auto; filter: brightness(0) invert(1); object-fit: contain; transition: opacity 0.3s; }
+        .logo-img[src=""] { opacity: 0; } /* Hide if src is empty */
+
+        #closed-notice { background: #ff4757; color: white; text-align: center; padding: 15px; font-weight: 700; position: sticky; top: 0; z-index: 3000; display: none; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         
-        #closed-notice { background: #ff4757; color: white; text-align: center; padding: 15px; font-weight: 700; position: sticky; top: 0; z-index: 3000; display: none; font-size: 14px; }
-        
-        /* Search Box */
-        .search-box { padding: 0 20px 15px; max-width: 600px; margin: 0 auto; }
-        .search-input { width: 100%; padding: 12px 20px; border-radius: 25px; border: none; outline: none; font-size: 14px; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        
-        /* Hero Slider */
-        #hero-slider { width: 100%; height: 280px; position: relative; overflow: hidden; }
-        .slide-container { width: 100%; height: 100%; position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transform: translateY(30px); transition: all 0.7s ease; }
+        .search-box { padding: 0 20px 15px; }
+        .search-input { width: 100%; padding: 14px 20px; border-radius: 25px; border: none; outline: none; font-size: 14px; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        #hero-slider { width: 100%; height: 280px; position: relative; overflow: hidden; margin-bottom: 10px; }
+        .slide-container { width: 100%; height: 100%; position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.7s ease; }
         .slide-container.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        
         .img-wrapper { position: relative; display: inline-block; padding-top: 15px; }
-        .slide-img { width: 250px; height: 150px; border-radius: 20px; object-fit: contain; background: rgba(255,255,255,0.1); padding: 10px; }
+        .slide-img { width: 250px; height: 150px; border-radius: 25px; object-fit: contain; background: rgba(255,255,255,0.15); padding: 10px; backdrop-filter: blur(5px); }
         
-        .pop-badge { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: white; color: var(--belgo); padding: 4px 15px; border-radius: 30px; font-size: 10px; font-weight: 800; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: pulse-glow 2s infinite ease-in-out; white-space: nowrap; z-index: 10; }
-        @keyframes pulse-glow { 0% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.1); box-shadow: 0 0 15px rgba(255,255,255,0.7); } 100% { transform: translateX(-50%) scale(1); } }
-        .pop-name { font-size: 1.3rem; font-weight: 700; margin-top: 12px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .pop-badge { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: white; color: var(--belgo); padding: 5px 18px; border-radius: 30px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: pulse-glow 2s infinite ease-in-out; white-space: nowrap; z-index: 10; }
+        
+        @keyframes pulse-glow { 0%, 100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.05); } }
+        
+        .pop-name { font-size: 1.4rem; font-weight: 700; margin-top: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
-        /* Menu Section */
-        .menu-section { padding: 15px 20px; max-width: 1200px; margin: 0 auto; }
-        .menu-section h3 { font-size: 1.1rem; border-left: 4px solid white; padding-left: 10px; margin-bottom: 15px; text-transform: uppercase; }
+        .menu-section { padding: 20px 0 10px 20px; }
+        .menu-section h3 { font-size: 1.1rem; border-left: 5px solid white; padding-left: 12px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* Responsive Grid/Scroll Logic */
-        .items-scroll { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
+        .items-scroll { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; padding-right: 20px; }
         .items-scroll::-webkit-scrollbar { display: none; }
-        
-        .menu-item { flex: 0 0 160px; background: var(--bg-light); border-radius: 22px; overflow: hidden; color: var(--text-dark); box-shadow: 0 8px 20px rgba(0,0,0,0.15); display: flex; flex-direction: column; transition: transform 0.3s ease; }
-        
-        /* Laptop Specific Styles */
-        @media (min-width: 1024px) {
-            .items-scroll { 
-                display: grid; 
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-                overflow-x: visible; 
-                gap: 25px; 
-            }
-            .menu-item { flex: none; width: 100%; }
-            .menu-item:hover { transform: translateY(-10px); }
-            .logo-img { height: 140px; }
-            .item-img { height: 150px; }
-        }
 
-        .item-img { width: 100%; height: 115px; object-fit: cover; background: white; }
-        .item-info { padding: 12px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .item-name { font-size: 13px; font-weight: 600; margin-bottom: 5px; min-height: 38px; line-height: 1.3; }
-        .item-price { font-weight: 800; font-size: 15px; margin-bottom: 10px; color: #000; }
+        .menu-item { flex: 0 0 170px; background: var(--bg-light); border-radius: 25px; overflow: hidden; color: var(--text-dark); box-shadow: 0 10px 25px rgba(0,0,0,0.12); display: flex; flex-direction: column; transition: transform 0.2s; }
+        .menu-item:active { transform: scale(0.97); }
         
-        .btn-container { min-height: 38px; display: flex; align-items: center; justify-content: center; }
-        .order-btn { background: var(--belgo); color: white; border: none; padding: 10px; border-radius: 12px; width: 100%; font-weight: 700; font-size: 12px; cursor: pointer; }
-        .order-btn:disabled { background: #bbb; cursor: not-allowed; }
+        .item-img { width: 100%; height: 120px; object-fit: cover; background: #eee; }
+        .item-info { padding: 14px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .item-name { font-size: 14px; font-weight: 600; margin-bottom: 6px; min-height: 40px; line-height: 1.3; }
+        .item-price { font-weight: 800; font-size: 16px; margin-bottom: 12px; color: #000; }
         
-        .qty-controls { display: flex; align-items: center; justify-content: space-between; background: #e8e8e8; border-radius: 12px; width: 100%; padding: 4px; }
-        .qty-btn { background: var(--belgo); color: white; border: none; width: 30px; height: 30px; border-radius: 8px; font-weight: 800; cursor: pointer; }
-        .qty-num { font-weight: 800; font-size: 15px; }
+        .btn-container { min-height: 40px; display: flex; align-items: center; justify-content: center; }
+        .order-btn { background: var(--belgo); color: white; border: none; padding: 11px; border-radius: 14px; width: 100%; font-weight: 700; font-size: 13px; cursor: pointer; transition: background 0.3s; }
+        .order-btn:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .qty-controls { display: flex; align-items: center; justify-content: space-between; background: #f0f0f0; border-radius: 14px; width: 100%; padding: 4px; border: 1px solid #ddd; }
+        .qty-btn { background: var(--belgo); color: white; border: none; width: 32px; height: 32px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 18px; }
+        .qty-num { font-weight: 800; font-size: 16px; color: var(--text-dark); }
 
-        /* Footer Order Bar */
-        .sticky-footer { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: white; padding: 14px; border-radius: 22px; box-shadow: 0 15px 45px rgba(0,0,0,0.4); z-index: 2000; display: none; box-sizing: border-box; animation: slideUp 0.4s ease-out; }
-        @keyframes slideUp { from { transform: translate(-50%, 100px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
-        .footer-order-btn { background: var(--belgo); color: white; width: 100%; padding: 15px; border-radius: 16px; border: none; font-weight: 800; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .sticky-footer { position: fixed; bottom: 25px; left: 5%; width: 90%; background: white; padding: 12px; border-radius: 24px; box-shadow: 0 15px 50px rgba(0,0,0,0.4); z-index: 2000; display: none; box-sizing: border-box; animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes slideUp { from { transform: translateY(120px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .footer-order-btn { background: var(--belgo); color: white; width: 100%; padding: 16px; border-radius: 18px; border: none; font-weight: 800; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 14px; }
+        
+        /* Empty State */
+        #empty-msg { text-align: center; padding: 40px 20px; opacity: 0.8; font-size: 15px; }
     </style>
 </head>
 <body>
 
-<div id="closed-notice"></div>
-<header><img src="" id="main-logo" class="logo-img" alt="Belgo Logo"></header>
+<div id="closed-notice">SORRY, WE ARE CLOSED!</div>
+
+<header>
+    <img src="" id="main-logo" class="logo-img" alt="Belgo Logo">
+</header>
 
 <div class="search-box">
-    <input type="text" id="menu-search" class="search-input" placeholder="Search desserts..." onkeyup="filterMenu()">
+    <input type="text" id="menu-search" class="search-input" placeholder="Search for your favorite dessert..." onkeyup="filterMenu()">
 </div>
 
 <div id="hero-slider"><div id="promo-slides"></div></div>
@@ -100,7 +100,7 @@
 </div>
 
 <script>
-    // --- Firebase Configuration ---
+    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
         apiKey: "AIzaSyBhckxp2E2v0e_moQM3D6UbqHI3u6l8wQo",
         authDomain: "belgo-menu.firebaseapp.com",
@@ -110,7 +110,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // --- Simple Analytics ---
+    // --- ANALYTICS ---
     const todayKey = new Date().toISOString().split('T')[0]; 
     const lastDailyVisit = localStorage.getItem('last_daily_visit');
     if (lastDailyVisit !== todayKey) {
@@ -126,12 +126,18 @@
     function checkStatus() {
         db.ref('settings').on('value', snap => {
             const s = snap.val() || {};
+            
             const now = new Date();
             const currentTime = now.getHours() * 60 + now.getMinutes();
-            const openTime = 690;  // 11:30 AM
-            const closeTime = 1410; // 11:30 PM
+            // Business Hours: 11:30 AM to 11:30 PM
+            const openTime = 690;  
+            const closeTime = 1410; 
 
-            isShopClosed = (s.status === 'closed' || currentTime < openTime || currentTime >= closeTime);
+            if (s.status === 'closed' || currentTime < openTime || currentTime >= closeTime) {
+                isShopClosed = true;
+            } else {
+                isShopClosed = false;
+            }
 
             const notice = document.getElementById('closed-notice');
             if (isShopClosed) {
@@ -141,7 +147,10 @@
                 notice.style.display = 'none';
             }
 
-            if(s.logo) document.getElementById('main-logo').src = s.logo;
+            if(s.logo) {
+                const logoEl = document.getElementById('main-logo');
+                logoEl.src = s.logo;
+            }
             loadMenu();
         });
     }
@@ -149,13 +158,18 @@
     db.ref('promos').on('value', snap => {
         const container = document.getElementById('promo-slides');
         const items = snap.val() || [];
+        if(items.length === 0) {
+            document.getElementById('hero-slider').style.display = 'none';
+            return;
+        }
+        document.getElementById('hero-slider').style.display = 'block';
         container.innerHTML = items.map((item, i) => {
             const cleanPromoName = (item.n || '').replace(/^\d+_/, '');
             return `
             <div class="slide-container ${i === 0 ? 'active' : ''}">
                 <div class="img-wrapper">
-                    <div class="pop-badge">⭐ Popular</div>
-                    <img src="${item.u}" class="slide-img">
+                    <div class="pop-badge">⭐ Popular Choice</div>
+                    <img src="${item.u}" class="slide-img" alt="promo">
                 </div>
                 <span class="pop-name">${cleanPromoName}</span>
             </div>`}).join('');
@@ -190,7 +204,7 @@
                 
                 catHtml += `
                     <div class="menu-item">
-                        <img src="${item.i}" class="item-img" loading="lazy">
+                        <img src="${item.i}" class="item-img" loading="lazy" alt="${displayName}">
                         <div class="item-info">
                             <div class="item-name">${displayName}</div>
                             <span class="item-price">₹${item.p}</span>
@@ -208,7 +222,7 @@
             });
             if (itemInCat) container.innerHTML += catHtml + `</div></div>`;
         });
-        if (!matchFound) container.innerHTML = '<p style="text-align:center; padding:20px;">No results found.</p>';
+        if (!matchFound) container.innerHTML = '<div id="empty-msg">No desserts found matching your search.</div>';
     }
 
     window.filterMenu = () => {
@@ -221,6 +235,10 @@
         if(!cart[n]) cart[n] = {p:p, q:0};
         cart[n].q += c;
         if(cart[n].q <= 0) delete cart[n];
+        
+        // Vibration for better UX
+        if (navigator.vibrate) navigator.vibrate(50);
+        
         const currentQuery = document.getElementById('menu-search').value;
         renderMenu(fullMenuData, currentQuery);
         updateFooter();
@@ -235,22 +253,28 @@
     }
 
     window.sendOrder = () => {
-        let txt = "*New Order - Belgo*\n\n";
+        let txt = "*New Order - Belgo*\n";
+        txt += "-------------------------\n";
         let total = 0;
         for(let n in cart) {
             const cleanName = n.replace(/^\d+_/, '');
-            txt += `▪️ ${cleanName} [x${cart[n].q}] - ₹${cart[n].q * cart[n].p}\n`;
+            txt += `▪️ ${cleanName} (x${cart[n].q}) - ₹${cart[n].q * cart[n].p}\n`;
             total += (cart[n].q * cart[n].p);
         }
-        txt += `\n*Total: ₹${total}*`;
-        window.open(`https://wa.me/917593010102?text=${encodeURIComponent(txt)}`);
+        txt += "-------------------------\n";
+        txt += `*Total Amount: ₹${total}*`;
+        
+        const waUrl = `https://wa.me/917593010102?text=${encodeURIComponent(txt)}`;
+        window.open(waUrl, '_blank');
     };
 
     let slideIdx = 0;
+    let slideTimer;
     function startSlider() {
+        if(slideTimer) clearInterval(slideTimer);
         const slides = document.querySelectorAll('.slide-container');
         if(slides.length < 2) return;
-        setInterval(() => {
+        slideTimer = setInterval(() => {
             slides[slideIdx].classList.remove('active');
             slideIdx = (slideIdx + 1) % slides.length;
             slides[slideIdx].classList.add('active');
@@ -258,7 +282,7 @@
     }
 
     checkStatus();
-    setInterval(checkStatus, 30000); 
+    setInterval(checkStatus, 60000); // Check status every minute
 </script>
 </body>
 </html>
