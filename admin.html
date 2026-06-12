@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Belgo Admin | Master Control</title>
+    <title>Fuezo laban Admin | Master Control</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     <style>
-        :root { --primary: #8CC63E; --bg: #f4f7f6; --dark: #333; --red: #ff4757; --blue: #3498db; }
+        :root { --primary: #6F2932; --bg: #f4f7f6; --dark: #333; --red: #ff4757; --blue: #3498db; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 15px; }
         .admin-container { max-width: 500px; margin: auto; display: none; }
         
@@ -22,11 +22,11 @@
         .tab-wrapper { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
         .tab-wrapper::-webkit-scrollbar { display: none; }
         .tab-btn { flex: 0 0 auto; padding: 12px 18px; border: none; background: #eee; border-radius: 15px; cursor: pointer; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #666; transition: 0.3s; }
-        .active-tab { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(140, 198, 62, 0.4); }
+        .active-tab { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(111, 41, 50, 0.4); }
 
         /* Forms */
         .admin-input { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #eee; border-radius: 15px; box-sizing: border-box; font-family: 'Poppins'; transition: 0.3s; }
-        .admin-input:focus { border-color: var(--primary); outline: none; background: #f9fff0; }
+        .admin-input:focus { border-color: var(--primary); outline: none; background: #fffbfb; }
         .btn-save { background: var(--primary); color: white; padding: 16px; border-radius: 18px; border: none; width: 100%; font-weight: 700; cursor: pointer; font-size: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .btn-save:active { transform: scale(0.98); }
 
@@ -49,7 +49,7 @@
 
 <div id="loginScreen" class="login-screen">
     <div class="login-box">
-        <h2 style="color: var(--primary); margin-top: 0;">Admin Login</h2>
+        <h2 style="color: var(--primary); margin-top: 0;">Fuezo laban Control</h2>
         <input type="password" id="adminPass" placeholder="Enter Admin Password" class="admin-input" style="text-align: center;">
         <button class="btn-save" onclick="checkLogin()">Access Dashboard</button>
     </div>
@@ -107,9 +107,16 @@
             </div>
             <div class="card">
                 <label style="font-size: 11px; font-weight: 700; color: #666;">CLOSED MESSAGE</label>
-                <input type="text" id="closingMsg" placeholder="e.g. Open at 4 PM" class="admin-input">
+                <input type="text" id="closingMsg" placeholder="e.g. Open at 12 PM" class="admin-input">
                 <button class="btn-save" style="background:var(--dark); padding: 10px; font-size: 12px; margin-top: 5px;" onclick="updateClosingMsg()">Update Message</button>
             </div>
+            
+            <div class="card">
+                <label style="font-size: 11px; font-weight: 700; color: #666;">STORE UPI ID</label>
+                <input type="text" id="upiId" placeholder="fuezolaban@upi" class="admin-input">
+                <button class="btn-save" style="background:#2e7d32;" onclick="saveUpi()">Save UPI ID</button>
+            </div>
+
             <div class="card">
                 <label style="font-size: 11px; font-weight: 700; color: #666;">STORE LOGO</label>
                 <input type="file" id="logoFile" class="admin-input" accept="image/*">
@@ -137,7 +144,7 @@
     const imgbbKey = "53133c0e06337943f4b4f460d1805e01";
 
     function checkLogin() {
-        if(document.getElementById('adminPass').value === "belgo@01") {
+        if(document.getElementById('adminPass').value === "fuezo@01") {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
             loadLiveItems('promo'); syncSettings();
@@ -200,8 +207,15 @@
         db.ref('settings').on('value', snap => {
             const s = snap.val() || {};
             document.getElementById('shopStatus').value = s.status || 'open';
-            document.getElementById('closingMsg').value = s.close_msg || 'SORRY, WE ARE CLOSED!';
+            document.getElementById('closingMsg').value = s.close_msg || 'SORRY, WE ARE CLOSED!'; 
+            document.getElementById('upiId').value = s.upi_id || '';
         });
+    }
+
+    function saveUpi(){
+        const upi = document.getElementById('upiId').value.trim();
+        db.ref('settings/upi_id').set(upi);
+        alert('UPI ID Saved Successfully');
     }
 
     function updateShopStatus() { db.ref('settings/status').set(document.getElementById('shopStatus').value); }
@@ -238,7 +252,7 @@
             const list = document.getElementById('orders-list'); list.innerHTML = '';
             const data = snap.val(); if(!data) { list.innerHTML = "<p>No orders yet.</p>"; return; }
             Object.keys(data).reverse().forEach(id => {
-                list.innerHTML += `<div class="card" style="font-size:12px; line-height:1.6;">${data[id].items}</div>`;
+                list.innerHTML += `<div class="card" style="font-size:12px; line-height:1.6; white-space: pre-wrap;">${data[id].items}</div>`;
             });
         });
     }
@@ -247,6 +261,4 @@
     function resetStats() { if(confirm("This will clear all visitor counts. Continue?")) db.ref('analytics').remove(); }
 </script>
 </body>
-</html>
-
-
+    </html>
