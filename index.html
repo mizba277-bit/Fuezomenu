@@ -3,29 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#8CC63E">
-    <meta name="description" content="Belgo Premium Dessert Lounge - Experience the finest desserts. Order online via WhatsApp.">
+    <meta name="theme-color" content="#6F2932">
+    <meta name="description" content="Fuezo laban - Experience the finest cafe and dessert items.">
     <meta name="google-site-verification" content="lsYRoTtttUw4RFypHTdc21V7gxH6-pVUeTT6EHaCB0o" />
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Belgo Menu">
+    <meta name="apple-mobile-web-app-title" content="Fuezo laban Menu">
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg viewBox='0 0 36 36' xmlns='http://www.w3.org/2000/svg' fill='%23000000'><path fill='%238CC63E' d='M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z'></path><path fill='white' d='M10.498 9.249c0-1.488 1.023-2.325 2.449-2.325H18.9c3.224 0 5.83 2.17 5.83 5.457c0 2.17-.9 3.628-2.885 4.558v.062c2.637.372 4.713 2.573 4.713 5.271c0 4.372-2.914 6.729-7.193 6.729h-6.386c-1.427 0-2.481-.899-2.481-2.356V9.249zm4.651 6.418h2.419c1.519 0 2.511-.899 2.511-2.45c0-1.457-1.147-2.201-2.511-2.201h-2.419v4.651zm0 9.24h3.659c1.674 0 2.915-.961 2.915-2.697c0-1.458-1.117-2.45-3.287-2.45h-3.287v5.147z'></path></svg>">
+    <link class="icon" type="image/svg+xml" href="data:image/svg+xml,<svg viewBox='0 0 36 36' xmlns='http://www.w3.org/2000/svg' fill='%23000000'><path fill='%236F2932' d='M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z'></path><path fill='white' d='M10.498 9.249c0-1.488 1.023-2.325 2.449-2.325H18.9c3.224 0 5.83 2.17 5.83 5.457c0 2.17-.9 3.628-2.885 4.558v.062c2.637.372 4.713 2.573 4.713 5.271c0 4.372-2.914 6.729-7.193 6.729h-6.386c-1.427 0-2.481-.899-2.481-2.356V9.249zm4.651 6.418h2.419c1.519 0 2.511-.899 2.511-2.45c0-1.457-1.147-2.201-2.511-2.201h-2.419v4.651zm0 9.24 Albany3.659c1.674 0 2.915-.961 2.915-2.697c0-1.458-1.117-2.45-3.287-2.45h-3.287v5.147z'></path></svg>">
 
-    <title>Belgo | Premium Dessert Lounge | Best Desserts</title>
+    <title>Fuezo laban | Premium Cafe & Dessert Lounge</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     
+    <!-- Razorpay Checkout SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
     <style>
-        :root { --belgo: #8CC63E; --bg-light: #f1f8e9; --white: #ffffff; --text-dark: #2d3436; }
-        body { font-family: 'Poppins', sans-serif; background: var(--belgo); margin: 0; padding-bottom: 120px; color: var(--white); overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        :root { --main-theme: #6F2932; --bg-light: #fbeee0; --off-white: #fcf8f2; --white: #ffffff; --text-dark: #2d3436; }
+        body { font-family: 'Poppins', sans-serif; background: var(--main-theme); margin: 0; padding-bottom: 100px; color: var(--white); overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         
-        header { padding: 35px 15px 10px; text-align: center; min-height: 100px; }
-        .logo-img { height: 100px; width: auto; filter: brightness(0) invert(1); object-fit: contain; transition: opacity 0.3s; }
-        .logo-img[src=""] { opacity: 0; } /* Hide if src is empty */
-
+        /* Updated header spacing */
+        header { padding: 25px 15px 15px; text-align: center; min-height: 150px; }
+        
+        /* Increased logo image size to 150px */
+        .logo-img { height: 150px; width: auto; filter: brightness(0) invert(1); object-fit: contain; transition: opacity 0.3s; }
+        .logo-img[src=""] { opacity: 0; }
+        
         #closed-notice { background: #ff4757; color: white; text-align: center; padding: 15px; font-weight: 700; position: sticky; top: 0; z-index: 3000; display: none; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         
         .search-box { padding: 0 20px 15px; }
@@ -38,7 +46,7 @@
         .img-wrapper { position: relative; display: inline-block; padding-top: 15px; }
         .slide-img { width: 250px; height: 150px; border-radius: 25px; object-fit: contain; background: rgba(255,255,255,0.15); padding: 10px; backdrop-filter: blur(5px); }
         
-        .pop-badge { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: white; color: var(--belgo); padding: 5px 18px; border-radius: 30px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: pulse-glow 2s infinite ease-in-out; white-space: nowrap; z-index: 10; }
+        .pop-badge { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: white; color: var(--main-theme); padding: 5px 18px; border-radius: 30px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: pulse-glow 2s infinite ease-in-out; white-space: nowrap; z-index: 10; }
         
         @keyframes pulse-glow { 0%, 100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.05); } }
         
@@ -50,8 +58,7 @@
         .items-scroll { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; padding-right: 20px; }
         .items-scroll::-webkit-scrollbar { display: none; }
 
-        .menu-item { flex: 0 0 170px; background: var(--bg-light); border-radius: 25px; overflow: hidden; color: var(--text-dark); box-shadow: 0 10px 25px rgba(0,0,0,0.12); display: flex; flex-direction: column; transition: transform 0.2s; }
-        .menu-item:active { transform: scale(0.97); }
+        .menu-item { flex: 0 0 170px; background: var(--off-white); border-radius: 25px; overflow: hidden; color: var(--text-dark); box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: flex; flex-direction: column; transition: transform 0.2s; }
         
         .item-img { width: 100%; height: 120px; object-fit: cover; background: #eee; }
         .item-info { padding: 14px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
@@ -59,20 +66,46 @@
         .item-price { font-weight: 800; font-size: 16px; margin-bottom: 12px; color: #000; }
         
         .btn-container { min-height: 40px; display: flex; align-items: center; justify-content: center; }
-        .order-btn { background: var(--belgo); color: white; border: none; padding: 11px; border-radius: 14px; width: 100%; font-weight: 700; font-size: 13px; cursor: pointer; transition: background 0.3s; }
-        .order-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .status-badge { background: #eee; color: var(--text-dark); padding: 8px; border-radius: 12px; width: 100%; font-weight: 700; font-size: 12px; text-transform: uppercase; }
+        .status-badge.closed { background: #ffeaa7; color: #d63031; }
         
-        .qty-controls { display: flex; align-items: center; justify-content: space-between; background: #f0f0f0; border-radius: 14px; width: 100%; padding: 4px; border: 1px solid #ddd; }
-        .qty-btn { background: var(--belgo); color: white; border: none; width: 32px; height: 32px; border-radius: 10px; font-weight: 800; cursor: pointer; font-size: 18px; }
-        .qty-num { font-weight: 800; font-size: 16px; color: var(--text-dark); }
+        .add-btn { background: var(--main-theme); color: white; border: none; padding: 8px 20px; border-radius: 15px; font-weight: 600; cursor: pointer; width: 100%; font-size: 13px; }
+        .qty-selector { display: flex; align-items: center; justify-content: space-between; width: 100%; background: #e8e3dc; border-radius: 15px; padding: 2px; box-sizing: border-box; }
+        .qty-btn { background: var(--main-theme); color: white; border: none; width: 32px; height: 32px; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .qty-val { font-weight: 700; font-size: 15px; color: var(--text-dark); }
 
-        .sticky-footer { position: fixed; bottom: 25px; left: 5%; width: 90%; background: white; padding: 12px; border-radius: 24px; box-shadow: 0 15px 50px rgba(0,0,0,0.4); z-index: 2000; display: none; box-sizing: border-box; animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes slideUp { from { transform: translateY(120px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        #cart-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 500px; background: #2ecc71; color: white; display: none; align-items: center; justify-content: space-between; padding: 15px 25px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2000; box-sizing: border-box; text-decoration: none; font-weight: 700; font-size: 15px; cursor: pointer; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 20px; opacity: 1; } }
+        .cart-count { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 13px; }
         
-        .footer-order-btn { background: var(--belgo); color: white; width: 100%; padding: 16px; border-radius: 18px; border: none; font-weight: 800; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 14px; }
-        
-        /* Empty State */
         #empty-msg { text-align: center; padding: 40px 20px; opacity: 0.8; font-size: 15px; }
+
+        /* Checkout Popup Overlay */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 4000; padding: 15px; box-sizing: border-box; }
+        .modal-box { background: var(--off-white); color: var(--text-dark); padding: 25px; border-radius: 25px; width: 100%; max-width: 400px; box-shadow: 0 15px 30px rgba(0,0,0,0.25); box-sizing: border-box; animation: zoomIn 0.25s ease; position: relative; }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-title { font-size: 1.2rem; font-weight: 700; color: var(--main-theme); margin-top: 0; margin-bottom: 15px; text-align: center; }
+        
+        .option-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        .opt-btn { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 15px; background: #fff; font-family: 'Poppins'; font-weight: 600; font-size: 13px; cursor: pointer; text-align: center; transition: 0.2s; }
+        .opt-btn.selected { border-color: var(--main-theme); background: #fff5f6; color: var(--main-theme); }
+        
+        .modal-input { width: 100%; padding: 12px 15px; margin-bottom: 15px; border: 1.5px solid #ddd; border-radius: 15px; box-sizing: border-box; font-family: 'Poppins'; font-size: 13px; background: #fff; }
+        .modal-input:focus { border-color: var(--main-theme); outline: none; }
+        
+        /* Razorpay Trigger Button */
+        .btn-pay-now { background: #2ecc71; color: white; width: 100%; padding: 14px; border-radius: 18px; border: none; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; }
+        .btn-pay-now:active { transform: scale(0.98); }
+        .btn-close { background: none; border: none; color: #aaa; font-weight: 700; float: right; cursor: pointer; font-size: 16px; margin-top: -5px; }
+
+        /* Digital Receipt Styling */
+        .receipt-container { text-align: center; color: #2d3436; }
+        .receipt-success-icon { font-size: 45px; color: #2ecc71; margin-bottom: 10px; }
+        .receipt-header { font-weight: 700; font-size: 18px; margin-bottom: 15px; color: #2ecc71; }
+        .receipt-card { background: #fff; border: 1px dashed #ccc; border-radius: 15px; padding: 15px; text-align: left; font-size: 13px; margin-bottom: 20px; max-height: 180px; overflow-y: auto; }
+        .receipt-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .receipt-total { border-top: 1px solid #ddd; padding-top: 8px; font-weight: 700; font-size: 15px; color: #000; }
+        .btn-receipt-done { background: var(--main-theme); color: white; width: 100%; padding: 12px; border-radius: 15px; border: none; font-weight: 600; font-size: 14px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -80,27 +113,32 @@
 <div id="closed-notice">SORRY, WE ARE CLOSED!</div>
 
 <header>
-    <img src="" id="main-logo" class="logo-img" alt="Belgo Logo">
+    <img src="" id="main-logo" class="logo-img" alt="Fuezo laban Logo">
 </header>
 
 <div class="search-box">
-    <input type="text" id="menu-search" class="search-input" placeholder="Search for your favorite dessert..." onkeyup="filterMenu()">
+    <input type="text" id="menu-search" class="search-input" placeholder="Search for your favorite items..." onkeyup="filterMenu()">
 </div>
 
 <div id="hero-slider"><div id="promo-slides"></div></div>
 
 <div id="full-menu"></div>
 
-<div class="sticky-footer" id="cart-footer">
-    <button onclick="sendOrder()" class="footer-order-btn">
-        <span id="f-count">0 ITEMS</span>
-        <span>CONFIRM ORDER</span>
-        <span id="f-total">₹0</span>
-    </button>
+<!-- Floating Cart Bar -->
+<div id="cart-bar" onclick="openCheckoutModal()">
+    <span class="cart-count" id="cart-count-txt">0 Items</span>
+    <span>View Cart & Checkout 🛒</span>
+    <span id="cart-total-txt">₹0</span>
+</div>
+
+<!-- Checkout Popup Modal -->
+<div id="checkoutModal" class="modal-overlay">
+    <div class="modal-box" id="modalDynamicContent">
+        <!-- Content dynamically injected -->
+    </div>
 </div>
 
 <script>
-    // --- FIREBASE CONFIG ---
     const firebaseConfig = {
         apiKey: "AIzaSyBhckxp2E2v0e_moQM3D6UbqHI3u6l8wQo",
         authDomain: "belgo-menu.firebaseapp.com",
@@ -110,31 +148,27 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // --- ANALYTICS ---
-    const todayKey = new Date().toISOString().split('T')[0]; 
-    const lastDailyVisit = localStorage.getItem('last_daily_visit');
-    if (lastDailyVisit !== todayKey) {
-        db.ref('analytics/total_visits').transaction(c => (c || 0) + 1);
-        db.ref('analytics/daily/' + todayKey).transaction(c => (c || 0) + 1);
-        localStorage.setItem('last_daily_visit', todayKey);
-    }
+    const WHATSAPP_NUMBER = "919000000000"; 
+    const RAZORPAY_KEY_ID = "rzp_test_51NxXxXxXxXxXxX"; 
 
     let isShopClosed = false;
-    let cart = {};
     let fullMenuData = {};
+    let cart = {};
+    let currentOrderType = 'Dine-In';
 
     function checkStatus() {
         db.ref('settings').on('value', snap => {
             const s = snap.val() || {};
-            
             const now = new Date();
             const currentTime = now.getHours() * 60 + now.getMinutes();
-            // Business Hours: 11:30 AM to 11:30 PM
-            const openTime = 690;  
-            const closeTime = 1410; 
+            const openTime = 720;  
+            const closeTime = 1440; 
 
             if (s.status === 'closed' || currentTime < openTime || currentTime >= closeTime) {
                 isShopClosed = true;
+                cart = {}; 
+                updateCartBar();
+                closeCheckoutModal();
             } else {
                 isShopClosed = false;
             }
@@ -148,8 +182,7 @@
             }
 
             if(s.logo) {
-                const logoEl = document.getElementById('main-logo');
-                logoEl.src = s.logo;
+                document.getElementById('main-logo').src = s.logo;
             }
             loadMenu();
         });
@@ -187,7 +220,6 @@
         const container = document.getElementById('full-menu'); 
         container.innerHTML = '';
         let matchFound = false;
-
         const sortedCats = Object.keys(data).sort();
 
         sortedCats.forEach(cat => {
@@ -199,73 +231,236 @@
                 const displayName = item.n.replace(/^\d+_/, '');
                 if (query && !displayName.toLowerCase().includes(query.toLowerCase())) return;
 
-                itemInCat = true; matchFound = true;
-                const qty = cart[item.n] ? cart[item.n].q : 0;
+                itemInCat = true; 
+                matchFound = true;
                 
+                const itemId = btoa(unescape(encodeURIComponent(item.n))).replace(/=/g, '');
+                const currentQty = cart[itemId] ? cart[itemId].qty : 0;
+
+                let btnHtml = '';
+                if (isShopClosed) {
+                    btnHtml = `<div class="status-badge closed">Closed</div>`;
+                } else {
+                    if (currentQty > 0) {
+                        btnHtml = `
+                            <div class="qty-selector">
+                                <button class="qty-btn" onclick="changeQty('${itemId}', -1, '${displayName}', ${item.p})">−</button>
+                                <span class="qty-val">${currentQty}</span>
+                                <button class="qty-btn" onclick="changeQty('${itemId}', 1, '${displayName}', ${item.p})">+</button>
+                            </div>`;
+                    } else {
+                        btnHtml = `<button class="add-btn" onclick="changeQty('${itemId}', 1, '${displayName}', ${item.p})">ADD TO CART</button>`;
+                    }
+                }
+
                 catHtml += `
                     <div class="menu-item">
                         <img src="${item.i}" class="item-img" loading="lazy" alt="${displayName}">
                         <div class="item-info">
                             <div class="item-name">${displayName}</div>
                             <span class="item-price">₹${item.p}</span>
-                            <div class="btn-container">
-                                ${qty > 0 ? `
-                                    <div class="qty-controls">
-                                        <button class="qty-btn" onclick="updateCart('${item.n}',${item.p},-1)">-</button>
-                                        <span class="qty-num">${qty}</span>
-                                        <button class="qty-btn" onclick="updateCart('${item.n}',${item.p},1)">+</button>
-                                    </div>` : 
-                                    `<button onclick="updateCart('${item.n}',${item.p},1)" class="order-btn" ${isShopClosed ? 'disabled' : ''}>ADD</button>`}
+                            <div class="btn-container" id="btn-box-${itemId}">
+                                ${btnHtml}
                             </div>
                         </div>
                     </div>`;
             });
             if (itemInCat) container.innerHTML += catHtml + `</div></div>`;
         });
-        if (!matchFound) container.innerHTML = '<div id="empty-msg">No desserts found matching your search.</div>';
+        if (!matchFound) container.innerHTML = '<div id="empty-msg">No items found matching your search.</div>';
+    }
+
+    window.changeQty = (id, amt, name, price) => {
+        if (!cart[id]) {
+            cart[id] = { name: name, price: price, qty: 0 };
+        }
+        cart[id].qty += amt;
+
+        if (cart[id].qty <= 0) {
+            delete cart[id];
+            const btnBox = document.getElementById(`btn-box-${id}`);
+            if(btnBox) btnBox.innerHTML = `<button class="add-btn" onclick="changeQty('${id}', 1, '${name}', ${price})">ADD TO CART</button>`;
+        } else {
+            const btnBox = document.getElementById(`btn-box-${id}`);
+            if(btnBox) {
+                btnBox.innerHTML = `
+                    <div class="qty-selector">
+                        <button class="qty-btn" onclick="changeQty('${id}', -1, '${name}', ${price})">−</button>
+                        <span class="qty-val">${cart[id].qty}</span>
+                        <button class="qty-btn" onclick="changeQty('${id}', 1, '${name}', ${price})">+</button>
+                    </div>`;
+            }
+        }
+        updateCartBar();
+    };
+
+    function updateCartBar() {
+        let totalItems = 0;
+        let totalPrice = 0;
+        for (let id in cart) {
+            totalItems += cart[id].qty;
+            totalPrice += (cart[id].qty * cart[id].price);
+        }
+        const cartBar = document.getElementById('cart-bar');
+        if (totalItems > 0 && !isShopClosed) {
+            document.getElementById('cart-count-txt').innerText = `${totalItems} Item${totalItems > 1 ? 's' : ''}`;
+            document.getElementById('cart-total-txt').innerText = `₹${totalPrice}`;
+            cartBar.style.display = 'flex';
+        } else {
+            cartBar.style.display = 'none';
+        }
+    }
+
+    function getCartTotal() {
+        let total = 0;
+        for (let id in cart) { total += (cart[id].qty * cart[id].price); }
+        return total;
+    }
+
+    window.openCheckoutModal = () => {
+        currentOrderType = 'Dine-In';
+        renderCheckoutForm();
+        document.getElementById('checkoutModal').style.display = 'flex';
+    };
+    
+    window.closeCheckoutModal = () => { document.getElementById('checkoutModal').style.display = 'none'; };
+
+    function renderCheckoutForm() {
+        const html = `
+            <button class="btn-close" onclick="closeCheckoutModal()">×</button>
+            <h3 class="modal-title">Checkout</h3>
+            
+            <label style="font-size: 11px; font-weight: 700; color: #666; display:block; margin-bottom:5px;">ORDER TYPE</label>
+            <div class="option-group">
+                <button id="typeDine" class="opt-btn selected" onclick="setOrderType('Dine-In')">Dine-In</button>
+                <button id="typeTake" class="opt-btn" onclick="setOrderType('Takeaway')">Takeaway</button>
+            </div>
+
+            <input type="text" id="custName" placeholder="Your Name" class="modal-input" required>
+            <input type="tel" id="custPhone" placeholder="Mobile Number" class="modal-input" required>
+
+            <button class="btn-pay-now" onclick="startRazorpayPayment()">Pay Now & Confirm Order</button>
+        `;
+        document.getElementById('modalDynamicContent').innerHTML = html;
+    }
+
+    window.setOrderType = (type) => {
+        currentOrderType = type;
+        document.getElementById('typeDine').classList.toggle('selected', type === 'Dine-In');
+        document.getElementById('typeTake').classList.toggle('selected', type === 'Takeaway');
+    };
+
+    window.startRazorpayPayment = () => {
+        const name = document.getElementById('custName').value.trim();
+        const phone = document.getElementById('custPhone').value.trim();
+
+        if(!name || !phone) {
+            alert("Please enter your Name and Mobile Number!");
+            return;
+        }
+
+        const totalAmount = getCartTotal();
+
+        const options = {
+            "key": RAZORPAY_KEY_ID, 
+            "amount": totalAmount * 100, 
+            "currency": "INR",
+            "name": "Fuezo laban",
+            "description": "Premium Cafe & Dessert Order",
+            "prefill": {
+                "name": name,
+                "contact": phone
+            },
+            "theme": {
+                "color": "#6F2932"
+            },
+            "handler": function (response) {
+                const paymentId = response.razorpay_payment_id;
+                processOrderConfirmation(name, phone, paymentId);
+            },
+            "modal": {
+                "ondismiss": function(){
+                    alert("Payment cancelled! Order not confirmed.");
+                }
+            }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+    };
+
+    function processOrderConfirmation(name, phone, paymentId) {
+        let orderSummary = `*Paid Online Order Details*%0A`;
+        orderSummary += `*Customer:* ${name}%0A`;
+        orderSummary += `*Phone:* ${phone}%0A`;
+        orderSummary += `*Type:* ${currentOrderType}%0A`;
+        orderSummary += `*Payment ID:* ${paymentId}%0A`;
+        orderSummary += `*Payment Status:* Verified SUCCESSFUL ✅ 💸%0A%0A`;
+        orderSummary += `*Items:*%0A`;
+
+        let total = 0;
+        let index = 1;
+        let receiptItemsHtml = '';
+
+        for (let id in cart) {
+            let sub = cart[id].qty * cart[id].price;
+            orderSummary += `${index}. ${cart[id].name} x ${cart[id].qty} = ₹${sub}%0A`;
+            
+            receiptItemsHtml += `
+                <div class="receipt-row">
+                    <span>${cart[id].name} (x${cart[id].qty})</span>
+                    <span>₹${sub}</span>
+                </div>`;
+            
+            total += sub;
+            index++;
+        }
+        orderSummary += `%0A*Grand Total: ₹${total}*`;
+
+        db.ref('orders').push({
+            items: decodeURIComponent(orderSummary).URIstring ? decodeURIComponent(orderSummary) : orderSummary.replace(/%0A/g, '\n').replace(/\*/g, ''),
+            payment_id: paymentId,
+            timestamp: Date.now()
+        });
+
+        showDigitalReceipt(name, receiptItemsHtml, total, paymentId);
+
+        const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${orderSummary}`;
+        window.open(waUrl, '_blank');
+
+        cart = {};
+        updateCartBar();
+        renderMenu(fullMenuData);
+    }
+
+    function showDigitalReceipt(name, itemsHtml, total, paymentId) {
+        const modalContent = document.getElementById('modalDynamicContent');
+        const receiptHtml = `
+            <div class="receipt-container">
+                <div class="receipt-success-icon">✓</div>
+                <div class="receipt-header">Payment Verified!</div>
+                <p style="font-size: 13px; margin-bottom: 15px; color: #555;">Thank you <b>${name}</b>, your payment was successful and order is confirmed.</p>
+                
+                <div class="receipt-card">
+                    <div style="font-weight:700; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:11px; color:#888;">FUEZO LABAN DIGITAL NOTE</div>
+                    <div style="font-size: 11px; margin-bottom:8px; color:#555;"><b>Ref ID:</b> ${paymentId}</div>
+                    ${itemsHtml}
+                    <div class="receipt-row receipt-total">
+                        <span>Grand Total</span>
+                        <span>₹${total}</span>
+                    </div>
+                </div>
+                
+                <p style="font-size: 11px; color: #ff7675; margin-bottom: 15px; font-weight:600;">Please collect your order from the counter when ready.</p>
+                <button class="btn-receipt-done" onclick="closeCheckoutModal()">Done</button>
+            </div>
+        `;
+        modalContent.innerHTML = receiptHtml;
     }
 
     window.filterMenu = () => {
         const query = document.getElementById('menu-search').value;
         renderMenu(fullMenuData, query);
-    };
-
-    window.updateCart = (n, p, c) => {
-        if(isShopClosed && c > 0) return;
-        if(!cart[n]) cart[n] = {p:p, q:0};
-        cart[n].q += c;
-        if(cart[n].q <= 0) delete cart[n];
-        
-        // Vibration for better UX
-        if (navigator.vibrate) navigator.vibrate(50);
-        
-        const currentQuery = document.getElementById('menu-search').value;
-        renderMenu(fullMenuData, currentQuery);
-        updateFooter();
-    };
-
-    function updateFooter() {
-        let count = 0, total = 0;
-        for(let k in cart){ count += cart[k].q; total += (cart[k].q * cart[k].p); }
-        document.getElementById('cart-footer').style.display = count > 0 ? 'block' : 'none';
-        document.getElementById('f-count').innerText = count + (count === 1 ? " ITEM" : " ITEMS");
-        document.getElementById('f-total').innerText = "₹" + total;
-    }
-
-    window.sendOrder = () => {
-        let txt = "*New Order - Belgo*\n";
-        txt += "-------------------------\n";
-        let total = 0;
-        for(let n in cart) {
-            const cleanName = n.replace(/^\d+_/, '');
-            txt += `▪️ ${cleanName} (x${cart[n].q}) - ₹${cart[n].q * cart[n].p}\n`;
-            total += (cart[n].q * cart[n].p);
-        }
-        txt += "-------------------------\n";
-        txt += `*Total Amount: ₹${total}*`;
-        
-        const waUrl = `https://wa.me/917593010102?text=${encodeURIComponent(txt)}`;
-        window.open(waUrl, '_blank');
     };
 
     let slideIdx = 0;
@@ -282,7 +477,8 @@
     }
 
     checkStatus();
-    setInterval(checkStatus, 60000); // Check status every minute
+    setInterval(checkStatus, 60000);
 </script>
+
 </body>
-</html>
+    </html>
