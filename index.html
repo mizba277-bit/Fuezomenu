@@ -16,21 +16,16 @@
     <title>Fuezo laban | Premium Cafe & Dessert Lounge</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     
-    <!-- Razorpay Checkout SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     
     <style>
         :root { --main-theme: #6F2932; --bg-light: #fbeee0; --off-white: #fcf8f2; --white: #ffffff; --text-dark: #2d3436; }
         body { font-family: 'Poppins', sans-serif; background: var(--main-theme); margin: 0; padding-bottom: 100px; color: var(--white); overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         
-        /* Updated header spacing */
         header { padding: 25px 15px 15px; text-align: center; min-height: 150px; }
-        
-        /* Increased logo image size to 150px */
         .logo-img { height: 150px; width: auto; filter: brightness(0) invert(1); object-fit: contain; transition: opacity 0.3s; }
         .logo-img[src=""] { opacity: 0; }
         
@@ -49,7 +44,6 @@
         .pop-badge { position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: white; color: var(--main-theme); padding: 5px 18px; border-radius: 30px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); animation: pulse-glow 2s infinite ease-in-out; white-space: nowrap; z-index: 10; }
         
         @keyframes pulse-glow { 0%, 100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.05); } }
-        
         .pop-name { font-size: 1.4rem; font-weight: 700; margin-top: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
         .menu-section { padding: 20px 0 10px 20px; }
@@ -58,7 +52,7 @@
         .items-scroll { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; padding-right: 20px; }
         .items-scroll::-webkit-scrollbar { display: none; }
 
-        .menu-item { flex: 0 0 170px; background: var(--off-white); border-radius: 25px; overflow: hidden; color: var(--text-dark); box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: flex; flex-direction: column; transition: transform 0.2s; }
+        .menu-item { flex: 0 0 170px; background: var(--off-white); border-radius: 25px; overflow: hidden; color: var(--text-dark); box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: flex; flex-direction: column; transition: transform 0.2s; cursor: pointer; }
         
         .item-img { width: 100%; height: 120px; object-fit: cover; background: #eee; }
         .item-info { padding: 14px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
@@ -93,7 +87,6 @@
         .modal-input { width: 100%; padding: 12px 15px; margin-bottom: 15px; border: 1.5px solid #ddd; border-radius: 15px; box-sizing: border-box; font-family: 'Poppins'; font-size: 13px; background: #fff; }
         .modal-input:focus { border-color: var(--main-theme); outline: none; }
         
-        /* Razorpay Trigger Button */
         .btn-pay-now { background: #2ecc71; color: white; width: 100%; padding: 14px; border-radius: 18px; border: none; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; }
         .btn-pay-now:active { transform: scale(0.98); }
         .btn-close { background: none; border: none; color: #aaa; font-weight: 700; float: right; cursor: pointer; font-size: 16px; margin-top: -5px; }
@@ -106,6 +99,16 @@
         .receipt-row { display: flex; justify-content: space-between; margin-bottom: 8px; }
         .receipt-total { border-top: 1px solid #ddd; padding-top: 8px; font-weight: 700; font-size: 15px; color: #000; }
         .btn-receipt-done { background: var(--main-theme); color: white; width: 100%; padding: 12px; border-radius: 15px; border: none; font-weight: 600; font-size: 14px; cursor: pointer; }
+
+        /* Item Description Modal Styling */
+        .item-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 5000; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
+        .item-modal-box { background: var(--off-white); color: var(--text-dark); border-radius: 30px; width: 100%; max-width: 450px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); animation: zoomIn 0.25s ease; position: relative; display: flex; flex-direction: column; }
+        .item-modal-img { width: 100%; height: 220px; object-fit: cover; background: #eee; }
+        .item-modal-content { padding: 25px; text-align: left; }
+        .item-modal-close { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .item-modal-name { font-size: 1.4rem; font-weight: 700; color: var(--main-theme); margin: 0 0 10px 0; }
+        .item-modal-price { font-size: 1.3rem; font-weight: 800; color: #000; margin-bottom: 15px; display: block; }
+        .item-modal-desc { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 25px; white-space: pre-line; }
     </style>
 </head>
 <body>
@@ -124,17 +127,26 @@
 
 <div id="full-menu"></div>
 
-<!-- Floating Cart Bar -->
 <div id="cart-bar" onclick="openCheckoutModal()">
     <span class="cart-count" id="cart-count-txt">0 Items</span>
     <span>View Cart & Checkout 🛒</span>
     <span id="cart-total-txt">₹0</span>
 </div>
 
-<!-- Checkout Popup Modal -->
 <div id="checkoutModal" class="modal-overlay">
-    <div class="modal-box" id="modalDynamicContent">
-        <!-- Content dynamically injected -->
+    <div class="modal-box" id="modalDynamicContent"></div>
+</div>
+
+<div id="itemDetailModal" class="item-modal-overlay">
+    <div class="item-modal-box">
+        <button class="item-modal-close" onclick="closeItemModal()">×</button>
+        <img src="" id="modalItemImg" class="item-modal-img" alt="">
+        <div class="item-modal-content">
+            <h3 id="modalItemName" class="item-modal-name"></h3>
+            <span id="modalItemPrice" class="item-modal-price"></span>
+            <p id="modalItemDesc" class="item-modal-desc"></p>
+            <div id="modalItemBtnContainer"></div>
+        </div>
     </div>
 </div>
 
@@ -169,6 +181,7 @@
                 cart = {}; 
                 updateCartBar();
                 closeCheckoutModal();
+                closeItemModal();
             } else {
                 isShopClosed = false;
             }
@@ -236,6 +249,9 @@
                 
                 const itemId = btoa(unescape(encodeURIComponent(item.n))).replace(/=/g, '');
                 const currentQty = cart[itemId] ? cart[itemId].qty : 0;
+                
+                const cleanDesc = (item.d || "Premium freshly prepared lounge item.").replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const itemImg = item.i || '';
 
                 let btnHtml = '';
                 if (isShopClosed) {
@@ -244,18 +260,18 @@
                     if (currentQty > 0) {
                         btnHtml = `
                             <div class="qty-selector">
-                                <button class="qty-btn" onclick="changeQty('${itemId}', -1, '${displayName}', ${item.p})">−</button>
+                                <button class="qty-btn" onclick="event.stopPropagation(); changeQty('${itemId}', -1, '${displayName}', ${item.p})">−</button>
                                 <span class="qty-val">${currentQty}</span>
-                                <button class="qty-btn" onclick="changeQty('${itemId}', 1, '${displayName}', ${item.p})">+</button>
+                                <button class="qty-btn" onclick="event.stopPropagation(); changeQty('${itemId}', 1, '${displayName}', ${item.p})">+</button>
                             </div>`;
                     } else {
-                        btnHtml = `<button class="add-btn" onclick="changeQty('${itemId}', 1, '${displayName}', ${item.p})">ADD TO CART</button>`;
+                        btnHtml = `<button class="add-btn" onclick="event.stopPropagation(); changeQty('${itemId}', 1, '${displayName}', ${item.p})">ADD TO CART</button>`;
                     }
                 }
 
                 catHtml += `
-                    <div class="menu-item">
-                        <img src="${item.i}" class="item-img" loading="lazy" alt="${displayName}">
+                    <div class="menu-item" onclick="openItemModal('${displayName}', '${item.p}', '${cleanDesc}', '${itemImg}', '${itemId}')">
+                        <img src="${itemImg}" class="item-img" loading="lazy" alt="${displayName}">
                         <div class="item-info">
                             <div class="item-name">${displayName}</div>
                             <span class="item-price">₹${item.p}</span>
@@ -325,20 +341,48 @@
     
     window.closeCheckoutModal = () => { document.getElementById('checkoutModal').style.display = 'none'; };
 
+    window.openItemModal = (name, price, desc, img, id) => {
+        document.getElementById('modalItemName').innerText = name;
+        document.getElementById('modalItemPrice').innerText = `₹${price}`;
+        document.getElementById('modalItemDesc').innerText = desc;
+        document.getElementById('modalItemImg').src = img;
+        updateModalButton(id, name, price);
+        document.getElementById('itemDetailModal').style.display = 'flex';
+    };
+
+    window.closeItemModal = () => { document.getElementById('itemDetailModal').style.display = 'none'; };
+
+    function updateModalButton(id, name, price) {
+        const container = document.getElementById('modalItemBtnContainer');
+        if (!container) return;
+        if (isShopClosed) {
+            container.innerHTML = `<div class="status-badge closed" style="text-align:center;">Closed</div>`;
+            return;
+        }
+        const currentQty = cart[id] ? cart[id].qty : 0;
+        if (currentQty > 0) {
+            container.innerHTML = `
+                <div class="qty-selector" style="max-width: 200px; margin: 0 auto;">
+                    <button class="qty-btn" onclick="changeQty('${id}', -1, '${name}', ${price}); updateModalButton('${id}', '${name}', ${price});">−</button>
+                    <span class="qty-val">${currentQty}</span>
+                    <button class="qty-btn" onclick="changeQty('${id}', 1, '${name}', ${price}); updateModalButton('${id}', '${name}', ${price});">+</button>
+                </div>`;
+        } else {
+            container.innerHTML = `<button class="add-btn" style="max-width: 200px; display:block; margin: 0 auto;" onclick="changeQty('${id}', 1, '${name}', ${price}); updateModalButton('${id}', '${name}', ${price});">ADD TO CART</button>`;
+        }
+    }
+
     function renderCheckoutForm() {
         const html = `
             <button class="btn-close" onclick="closeCheckoutModal()">×</button>
             <h3 class="modal-title">Checkout</h3>
-            
             <label style="font-size: 11px; font-weight: 700; color: #666; display:block; margin-bottom:5px;">ORDER TYPE</label>
             <div class="option-group">
                 <button id="typeDine" class="opt-btn selected" onclick="setOrderType('Dine-In')">Dine-In</button>
                 <button id="typeTake" class="opt-btn" onclick="setOrderType('Takeaway')">Takeaway</button>
             </div>
-
             <input type="text" id="custName" placeholder="Your Name" class="modal-input" required>
             <input type="tel" id="custPhone" placeholder="Mobile Number" class="modal-input" required>
-
             <button class="btn-pay-now" onclick="startRazorpayPayment()">Pay Now & Confirm Order</button>
         `;
         document.getElementById('modalDynamicContent').innerHTML = html;
@@ -353,12 +397,7 @@
     window.startRazorpayPayment = () => {
         const name = document.getElementById('custName').value.trim();
         const phone = document.getElementById('custPhone').value.trim();
-
-        if(!name || !phone) {
-            alert("Please enter your Name and Mobile Number!");
-            return;
-        }
-
+        if(!name || !phone) { alert("Please enter your Name and Mobile Number!"); return; }
         const totalAmount = getCartTotal();
 
         const options = {
@@ -367,108 +406,63 @@
             "currency": "INR",
             "name": "Fuezo laban",
             "description": "Premium Cafe & Dessert Order",
-            "prefill": {
-                "name": name,
-                "contact": phone
-            },
-            "theme": {
-                "color": "#6F2932"
-            },
-            "handler": function (response) {
-                const paymentId = response.razorpay_payment_id;
-                processOrderConfirmation(name, phone, paymentId);
-            },
-            "modal": {
-                "ondismiss": function(){
-                    alert("Payment cancelled! Order not confirmed.");
-                }
-            }
+            "prefill": { "name": name, "contact": phone },
+            "theme": { "color": "#6F2932" },
+            "handler": function (response) { processOrderConfirmation(name, phone, response.razorpay_payment_id); },
+            "modal": { "ondismiss": function(){ alert("Payment cancelled! Order not confirmed."); } }
         };
-
-        const rzp = new Razorpay(options);
-        rzp.open();
+        const rzp = new Razorpay(options); rzp.open();
     };
 
     function processOrderConfirmation(name, phone, paymentId) {
-        let orderSummary = `*Paid Online Order Details*%0A`;
-        orderSummary += `*Customer:* ${name}%0A`;
-        orderSummary += `*Phone:* ${phone}%0A`;
-        orderSummary += `*Type:* ${currentOrderType}%0A`;
-        orderSummary += `*Payment ID:* ${paymentId}%0A`;
-        orderSummary += `*Payment Status:* Verified SUCCESSFUL ✅ 💸%0A%0A`;
-        orderSummary += `*Items:*%0A`;
-
-        let total = 0;
-        let index = 1;
-        let receiptItemsHtml = '';
+        let orderSummary = `*Paid Online Order Details*%0ACustomer: ${name}%0APhone: ${phone}%0AType: ${currentOrderType}%0APayment ID: ${paymentId}%0APayment Status: Verified SUCCESSFUL ✅ 💸%0A%0A*Items:*%0A`;
+        let total = 0; let index = 1; let receiptItemsHtml = '';
 
         for (let id in cart) {
             let sub = cart[id].qty * cart[id].price;
             orderSummary += `${index}. ${cart[id].name} x ${cart[id].qty} = ₹${sub}%0A`;
-            
-            receiptItemsHtml += `
-                <div class="receipt-row">
-                    <span>${cart[id].name} (x${cart[id].qty})</span>
-                    <span>₹${sub}</span>
-                </div>`;
-            
-            total += sub;
-            index++;
+            receiptItemsHtml += `<div class="receipt-row"><span>${cart[id].name} (x${cart[id].qty})</span><span>₹${sub}</span></div>`;
+            total += sub; index++;
         }
         orderSummary += `%0A*Grand Total: ₹${total}*`;
 
         db.ref('orders').push({
-            items: decodeURIComponent(orderSummary).URIstring ? decodeURIComponent(orderSummary) : orderSummary.replace(/%0A/g, '\n').replace(/\*/g, ''),
+            items: orderSummary.replace(/%0A/g, '\n').replace(/\*/g, ''),
             payment_id: paymentId,
             timestamp: Date.now()
         });
 
         showDigitalReceipt(name, receiptItemsHtml, total, paymentId);
+        window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${orderSummary}`, '_blank');
 
-        const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${orderSummary}`;
-        window.open(waUrl, '_blank');
-
-        cart = {};
-        updateCartBar();
-        renderMenu(fullMenuData);
+        cart = {}; updateCartBar(); renderMenu(fullMenuData);
     }
 
     function showDigitalReceipt(name, itemsHtml, total, paymentId) {
-        const modalContent = document.getElementById('modalDynamicContent');
-        const receiptHtml = `
+        document.getElementById('modalDynamicContent').innerHTML = `
             <div class="receipt-container">
                 <div class="receipt-success-icon">✓</div>
                 <div class="receipt-header">Payment Verified!</div>
                 <p style="font-size: 13px; margin-bottom: 15px; color: #555;">Thank you <b>${name}</b>, your payment was successful and order is confirmed.</p>
-                
                 <div class="receipt-card">
                     <div style="font-weight:700; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px; font-size:11px; color:#888;">FUEZO LABAN DIGITAL NOTE</div>
                     <div style="font-size: 11px; margin-bottom:8px; color:#555;"><b>Ref ID:</b> ${paymentId}</div>
                     ${itemsHtml}
-                    <div class="receipt-row receipt-total">
-                        <span>Grand Total</span>
-                        <span>₹${total}</span>
-                    </div>
+                    <div class="receipt-row receipt-total"><span>Grand Total</span><span>₹${total}</span></div>
                 </div>
-                
                 <p style="font-size: 11px; color: #ff7675; margin-bottom: 15px; font-weight:600;">Please collect your order from the counter when ready.</p>
                 <button class="btn-receipt-done" onclick="closeCheckoutModal()">Done</button>
-            </div>
-        `;
-        modalContent.innerHTML = receiptHtml;
+            </div>`;
     }
 
     window.filterMenu = () => {
-        const query = document.getElementById('menu-search').value;
-        renderMenu(fullMenuData, query);
+        renderMenu(fullMenuData, document.getElementById('menu-search').value);
     };
 
-    let slideIdx = 0;
-    let slideTimer;
+    let slideIdx = 0; let slideTimer;
     function startSlider() {
         if(slideTimer) clearInterval(slideTimer);
-        const slides = document.querySelectorAll('.slide-container');
-        if(slides.length < 2) return;
+        const slides = document.querySelectorAll('.slide-container'); if(slides.length < 2) return;
         slideTimer = setInterval(() => {
             slides[slideIdx].classList.remove('active');
             slideIdx = (slideIdx + 1) % slides.length;
@@ -479,6 +473,5 @@
     checkStatus();
     setInterval(checkStatus, 60000);
 </script>
-
 </body>
-    </html>
+</html>
