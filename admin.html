@@ -75,6 +75,7 @@
             <input type="text" id="newCat" placeholder="Category (e.g. 1_Desserts)" class="admin-input">
             <input type="text" id="newName" placeholder="Item Name" class="admin-input">
             <input type="number" id="newPrice" placeholder="Price (₹)" class="admin-input">
+            <textarea id="newDesc" placeholder="Item Description (e.g. Premium chocolate blend with topping...)" class="admin-input" rows="3" style="resize: vertical;"></textarea>
             <input type="file" id="imageFile" class="admin-input" accept="image/*">
             <button class="btn-save" onclick="handleUpload('menu')">Add to Menu</button>
         </div>
@@ -185,14 +186,28 @@
                 let list = snap.val() || [];
                 list.push({ u: url, n: document.getElementById('promoName').value });
                 await db.ref('promos').set(list);
+                document.getElementById('promoName').value = '';
+                document.getElementById('promoFile').value = '';
             } else if(type === 'menu') {
                 const cat = document.getElementById('newCat').value || "General";
                 const snap = await db.ref(`menu/${cat}`).once('value');
                 let list = snap.val() || [];
-                list.push({ n: document.getElementById('newName').value, p: document.getElementById('newPrice').value, i: url });
+                const descValue = document.getElementById('newDesc').value.trim();
+
+                list.push({ 
+                    n: document.getElementById('newName').value, 
+                    p: document.getElementById('newPrice').value, 
+                    i: url,
+                    d: descValue
+                });
                 await db.ref(`menu/${cat}`).set(list);
+                document.getElementById('newName').value = '';
+                document.getElementById('newPrice').value = '';
+                document.getElementById('newDesc').value = '';
+                document.getElementById('imageFile').value = '';
             } else if(type === 'logo') {
                 await db.ref('settings/logo').set(url);
+                document.getElementById('logoFile').value = '';
             }
             alert("Success!");
             loadLiveItems(type);
@@ -232,7 +247,16 @@
             } else {
                 for(let cat in data) {
                     data[cat].forEach((item, i) => {
-                        listDiv.innerHTML += `<div class="preview-card"><span><b>${cat}</b>: ${item.n}</span> <button class="del-btn" onclick="deleteItem('menu','${cat}',${i})">Delete</button></div>`;
+                        const itemDesc = item.d ? `<br><small style="color:#777; display:block; margin-top:3px;">📝 ${item.d}</small>` : '';
+                        listDiv.innerHTML += `
+                            <div class="preview-card" style="align-items: flex-start;">
+                                <img src="${item.i || ''}" class="preview-img" style="width:45px; height:45px;">
+                                <div style="flex-grow:1;">
+                                    <span style="font-size:13px;"><b>${cat.replace(/^\d+_/, '')}</b>: ${item.n} - ₹${item.p}</span>
+                                    ${itemDesc}
+                                </div>
+                                <button class="del-btn" onclick="deleteItem('menu','${cat}',${i})">Delete</button>
+                            </div>`;
                     });
                 }
             }
@@ -261,4 +285,4 @@
     function resetStats() { if(confirm("This will clear all visitor counts. Continue?")) db.ref('analytics').remove(); }
 </script>
 </body>
-    </html>
+</html>
