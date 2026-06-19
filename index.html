@@ -214,6 +214,11 @@
     let currentOrderType = 'Dine-In';
     let initialLoadComplete = false;
 
+    // Premium Safe Timeout Mechanism (Forces screen to fade out after max 2.5 seconds regardless of network lag)
+    setTimeout(() => {
+        hideLoadingScreen();
+    }, 2500);
+
     function hideLoadingScreen() {
         if (!initialLoadComplete) {
             initialLoadComplete = true;
@@ -284,8 +289,7 @@
         db.ref('menu').once('value', snap => {
             fullMenuData = snap.val() || {};
             renderMenu(fullMenuData);
-            // Minimum delay to let user experience the luxury splash transition smoothly
-            setTimeout(hideLoadingScreen, 1200); 
+            setTimeout(hideLoadingScreen, 800); 
         }, () => {
             hideLoadingScreen(); 
         });
@@ -293,6 +297,7 @@
 
     function renderMenu(data, query = "") {
         const container = document.getElementById('full-menu'); 
+        if(!container) return;
         container.innerHTML = '';
         let matchFound = false;
         const sortedCats = Object.keys(data).sort();
@@ -532,7 +537,6 @@
         }, 4000);
     }
 
-    // Trigger status verification loop
     checkStatus();
     setInterval(checkStatus, 60000);
 </script>
