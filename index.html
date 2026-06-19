@@ -14,15 +14,18 @@
     <link class="icon" type="image/svg+xml" href="data:image/svg+xml,<svg viewBox='0 0 36 36' xmlns='http://www.w3.org/2000/svg' fill='%23000000'><path fill='%236F2932' d='M36 32a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h28a4 4 0 0 1 4 4v28z'></path><path fill='white' d='M10.498 9.249c0-1.488 1.023-2.325 2.449-2.325H18.9c3.224 0 5.83 2.17 5.83 5.457c0 2.17-.9 3.628-2.885 4.558v.062c2.637.372 4.713 2.573 4.713 5.271c0 4.372-2.914 6.729-7.193 6.729h-6.386c-1.427 0-2.481-.899-2.481-2.356V9.249zm4.651 6.418h2.419c1.519 0 2.511-.899 2.511-2.45c0-1.457-1.147-2.201-2.511-2.201h-2.419v4.651zm0 9.24 Albany3.659c1.674 0 2.915-.961 2.915-2.697c0-1.458-1.117-2.45-3.287-2.45h-3.287v5.147z'></path></svg>">
 
     <title>Fuezo laban | Premium Cafe & Dessert Lounge</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
     
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
     
     <style>
-        :root { --main-theme: #6F2932; --bg-light: #fbeee0; --off-white: #fcf8f2; --white: #ffffff; --text-dark: #2d3436; }
+        :root { --main-theme: #6F2932; --bg-light: #fbeee0; --off-white: #fcf8f2; --white: #ffffff; --text-dark: #2d3436; --gold: #d4af37; }
         body { font-family: 'Poppins', sans-serif; background: var(--main-theme); margin: 0; padding-bottom: 100px; color: var(--white); overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         
         header { padding: 25px 15px 15px; text-align: center; min-height: 150px; }
@@ -34,7 +37,7 @@
         .search-box { padding: 0 20px 15px; }
         .search-input { width: 100%; padding: 14px 20px; border-radius: 25px; border: none; outline: none; font-size: 14px; box-sizing: border-box; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        #hero-slider { width: 100%; height: 280px; position: relative; overflow: hidden; margin-bottom: 10px; }
+        #hero-slider { width: 100%; height: 280px; position: relative; overflow: hidden; margin-bottom: 10px; display: none; }
         .slide-container { width: 100%; height: 100%; position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.7s ease; }
         .slide-container.active { opacity: 1; visibility: visible; transform: translateY(0); }
         
@@ -46,7 +49,7 @@
         @keyframes pulse-glow { 0%, 100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.05); } }
         .pop-name { font-size: 1.4rem; font-weight: 700; margin-top: 15px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
 
-        .menu-section { padding: 20px 0 10px 20px; }
+        .menu-section { padding: 20px 0 10px 20px; content-visibility: auto; contain-intrinsic-size: 250px; }
         .menu-section h3 { font-size: 1.1rem; border-left: 5px solid white; padding-left: 12px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
         
         .items-scroll { display: flex; gap: 18px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; padding-right: 20px; }
@@ -73,6 +76,29 @@
         .cart-count { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 15px; font-size: 13px; }
         
         #empty-msg { text-align: center; padding: 40px 20px; opacity: 0.8; font-size: 15px; }
+
+        /* Premium Luxury Loading Screen Layout */
+        #loading-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #111111; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s; }
+        .premium-loader-container { position: relative; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; }
+        
+        /* Golden Elegant Circle Trackers */
+        .premium-ring { position: absolute; width: 100%; height: 100%; border: 2px solid rgba(212, 175, 55, 0.08); border-radius: 50%; }
+        .premium-ring-active { position: absolute; width: 100%; height: 100%; border: 2px solid transparent; border-top: 2px solid var(--gold); border-radius: 50%; animation: luxuryRotate 2.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite; }
+        
+        /* Typography Content */
+        .brand-load-text { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700; color: var(--white); letter-spacing: 4px; text-transform: uppercase; text-align: center; animation: premiumPulse 2s ease-in-out infinite; margin-top: 4px; text-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        .luxury-sub-text { font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 300; color: rgba(212, 175, 55, 0.6); letter-spacing: 3px; text-transform: uppercase; margin-top: 25px; animation: textFade 1.5s ease-in-out infinite alternate; }
+
+        @keyframes luxuryRotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes premiumPulse { 0%, 100% { opacity: 0.7; transform: scale(0.98); } 50% { opacity: 1; transform: scale(1); } }
+        @keyframes textFade { 0% { opacity: 0.3; } 100% { opacity: 0.9; } }
+
+        /* Skeleton Shimmer Placeholders */
+        .skeleton-section { padding: 20px 0 10px 20px; }
+        .skeleton-title { width: 120px; height: 20px; background: rgba(255,255,255,0.15); border-radius: 4px; margin-bottom: 15px; }
+        .skeleton-item { flex: 0 0 170px; height: 230px; background: rgba(255,255,255,0.1); border-radius: 25px; position: relative; overflow: hidden; }
+        .skeleton-item::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; transform: translateX(-100%); background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 20%, rgba(255,255,255,0.2) 60%, rgba(255,255,255,0) 100%); animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
 
         /* Checkout Popup Overlay */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 4000; padding: 15px; box-sizing: border-box; }
@@ -113,6 +139,16 @@
 </head>
 <body>
 
+<!-- Premium Luxury Loading Screen -->
+<div id="loading-screen">
+    <div class="premium-loader-container">
+        <div class="premium-ring"></div>
+        <div class="premium-ring-active"></div>
+        <div class="brand-load-text">Fuezo<br>Laban</div>
+    </div>
+    <div class="luxury-sub-text">Fine Desserts & Cafe</div>
+</div>
+
 <div id="closed-notice">SORRY, WE ARE CLOSED!</div>
 
 <header>
@@ -125,7 +161,16 @@
 
 <div id="hero-slider"><div id="promo-slides"></div></div>
 
-<div id="full-menu"></div>
+<div id="full-menu">
+    <div class="skeleton-section">
+        <div class="skeleton-title"></div>
+        <div class="items-scroll">
+            <div class="skeleton-item"></div>
+            <div class="skeleton-item"></div>
+            <div class="skeleton-item"></div>
+        </div>
+    </div>
+</div>
 
 <div id="cart-bar" onclick="openCheckoutModal()">
     <span class="cart-count" id="cart-count-txt">0 Items</span>
@@ -167,6 +212,19 @@
     let fullMenuData = {};
     let cart = {};
     let currentOrderType = 'Dine-In';
+    let initialLoadComplete = false;
+
+    function hideLoadingScreen() {
+        if (!initialLoadComplete) {
+            initialLoadComplete = true;
+            const loader = document.getElementById('loading-screen');
+            if (loader) {
+                loader.style.opacity = '0';
+                loader.style.transform = 'scale(1.03)';
+                setTimeout(() => loader.style.display = 'none', 600);
+            }
+        }
+    }
 
     function checkStatus() {
         db.ref('settings').on('value', snap => {
@@ -226,6 +284,10 @@
         db.ref('menu').once('value', snap => {
             fullMenuData = snap.val() || {};
             renderMenu(fullMenuData);
+            // Minimum delay to let user experience the luxury splash transition smoothly
+            setTimeout(hideLoadingScreen, 1200); 
+        }, () => {
+            hideLoadingScreen(); 
         });
     }
 
@@ -470,6 +532,7 @@
         }, 4000);
     }
 
+    // Trigger status verification loop
     checkStatus();
     setInterval(checkStatus, 60000);
 </script>
