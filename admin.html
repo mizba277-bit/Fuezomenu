@@ -72,7 +72,7 @@
         </div>
 
         <div id="menu-form" class="tab-content" style="display:none;">
-            <input type="text" id="newCat" placeholder="Category (e.g. 1_Desserts)" class="admin-input">
+            <input type="text" id="newCat" placeholder="Category (e.g. Pancakes)" class="admin-input">
             <input type="text" id="newName" placeholder="Item Name" class="admin-input">
             <input type="number" id="newPrice" placeholder="Price (₹)" class="admin-input">
             <textarea id="newDesc" placeholder="Item Description (e.g. Premium chocolate blend with topping...)" class="admin-input" rows="3" style="resize: vertical;"></textarea>
@@ -183,24 +183,43 @@
 
             if(type === 'promo') {
                 const snap = await db.ref('promos').once('value');
-                let list = snap.val() || [];
-                list.push({ u: url, n: document.getElementById('promoName').value });
-                await db.ref('promos').set(list);
+                let promoList = snap.val() || [];
+                promoList.push({ u: url, n: document.getElementById('promoName').value });
+                await db.ref('promos').set(promoList);
                 document.getElementById('promoName').value = '';
                 document.getElementById('promoFile').value = '';
             } else if(type === 'menu') {
-                const cat = document.getElementById('newCat').value || "General";
-                const snap = await db.ref(`menu/${cat}`).once('value');
-                let list = snap.val() || [];
+                let inputCat = document.getElementById('newCat').value.trim() || "General";
+                
+                // ഇവിടെയാണ് കാറ്റഗറി ഡ്യൂപ്ലിക്കേഷൻ വരാതിരിക്കാൻ ചെക്ക് ചെയ്യുന്നത്
+                const entireMenuSnap = await db.ref('menu').once('value');
+                const currentMenuData = entireMenuSnap.val() || {};
+                
+                let finalCatPath = inputCat; 
+                
+                // നിലവിലുള്ള കാറ്റഗറികളിൽ ഈ പേര് (1_Pancakes അല്ലെങ്കിൽ വെറും Pancakes) ഉണ്ടോ എന്ന് നോക്കുന്നു
+                for (let existingCat in currentMenuData) {
+                    let cleanExisting = existingCat.replace(/^\d+_/, '').toLowerCase();
+                    let cleanInput = inputCat.replace(/^\d+_/, '').toLowerCase();
+                    
+                    if (cleanExisting === cleanInput) {
+                        finalCatPath = existingCat; // ഒരേ പേര് കണ്ടാൽ ആ കാറ്റഗറി പാത്ത് തന്നെ ഉപയോഗിക്കും
+                        break;
+                    }
+                }
+
+                const catSnap = await db.ref(`menu/${finalCatPath}`).once('value');
+                let menuList = catSnap.val() || [];
                 const descValue = document.getElementById('newDesc').value.trim();
 
-                list.push({ 
+                menuList.push({ 
                     n: document.getElementById('newName').value, 
-                    p: document.getElementById('newPrice').value, 
+                    p: Number(document.getElementById('newPrice').value), 
                     i: url,
                     d: descValue
                 });
-                await db.ref(`menu/${cat}`).set(list);
+                
+                await db.ref(`menu/${finalCatPath}`).set(menuList);
                 document.getElementById('newName').value = '';
                 document.getElementById('newPrice').value = '';
                 document.getElementById('newDesc').value = '';
@@ -210,7 +229,7 @@
                 document.getElementById('logoFile').value = '';
             }
             alert("Success!");
-            loadLiveItems(type);
+            loadLiveItems(type === 'logo' ? 'menu' : type);
         } catch (e) { alert("Upload Failed"); }
         finally { btn.innerText = originalText; btn.disabled = false; }
     }
@@ -238,15 +257,23 @@
 
     function loadLiveItems(type) {
         const listDiv = document.getElementById('items-list-inner');
+        
+        db.ref('promos').off();
+        db.ref('menu').off();
+        
         db.ref(type === 'promo' ? 'promos' : 'menu').on('value', snap => {
             listDiv.innerHTML = ''; const data = snap.val(); if(!data) return;
             if(type === 'promo') {
-                data.forEach((item, i) => {
+                const promoData = Array.isArray(data) ? data : Object.values(data);
+                promoData.forEach((item, i) => {
+                    if(!item) return;
                     listDiv.innerHTML += `<div class="preview-card"><img src="${item.u}" class="preview-img"> <span>${item.n}</span> <button class="del-btn" onclick="deleteItem('promo',null,${i})">Delete</button></div>`;
                 });
             } else {
                 for(let cat in data) {
+                    if(!data[cat]) continue;
                     data[cat].forEach((item, i) => {
+                        if(!item) return;
                         const itemDesc = item.d ? `<br><small style="color:#777; display:block; margin-top:3px;">📝 ${item.d}</small>` : '';
                         listDiv.innerHTML += `
                             <div class="preview-card" style="align-items: flex-start;">
@@ -276,7 +303,7 @@
             const list = document.getElementById('orders-list'); list.innerHTML = '';
             const data = snap.val(); if(!data) { list.innerHTML = "<p>No orders yet.</p>"; return; }
             Object.keys(data).reverse().forEach(id => {
-                list.innerHTML += `<div class="card" style="font-size:12px; line-height:1.6; white-space: pre-wrap;">${data[id].items}</div>`;
+                list.innerHTML += `<div class="card" style="font-size:12px; line-height:1.6; white-wrap: pre-wrap;">${data[id].items}</div>`;
             });
         });
     }
@@ -285,4 +312,4 @@
     function resetStats() { if(confirm("This will clear all visitor counts. Continue?")) db.ref('analytics').remove(); }
 </script>
 </body>
-</html>
+    </html>
