@@ -139,7 +139,6 @@
 </head>
 <body>
 
-<!-- Premium Luxury Loading Screen - Configured with Brand Theme Background -->
 <div id="loading-screen">
     <div class="premium-loader-container">
         <div class="premium-ring"></div>
@@ -214,7 +213,7 @@
     let currentOrderType = 'Dine-In';
     let initialLoadComplete = false;
 
-    // Premium Safe Timeout Mechanism (Forces screen to fade out after max 2.5 seconds regardless of network lag)
+    // Premium Safe Timeout Mechanism
     setTimeout(() => {
         hideLoadingScreen();
     }, 2500);
@@ -273,6 +272,7 @@
         }
         document.getElementById('hero-slider').style.display = 'block';
         container.innerHTML = items.map((item, i) => {
+            if(!item) return '';
             const cleanPromoName = (item.n || '').replace(/^\d+_/, '');
             return `
             <div class="slide-container ${i === 0 ? 'active' : ''}">
@@ -285,10 +285,12 @@
         startSlider();
     });
 
+    // ഇവിടെ തിരുത്തിയിട്ടുണ്ട് - റിയൽ-ടൈം അപ്ഡേറ്റിനായി '.on' സെറ്റ് ചെയ്തു
     function loadMenu() {
-        db.ref('menu').once('value', snap => {
+        db.ref('menu').on('value', snap => {
             fullMenuData = snap.val() || {};
-            renderMenu(fullMenuData);
+            const searchQuery = document.getElementById('menu-search') ? document.getElementById('menu-search').value : "";
+            renderMenu(fullMenuData, searchQuery);
             setTimeout(hideLoadingScreen, 800); 
         }, () => {
             hideLoadingScreen(); 
@@ -303,11 +305,13 @@
         const sortedCats = Object.keys(data).sort();
 
         sortedCats.forEach(cat => {
+            if(!data[cat]) return;
             const displayCategory = cat.replace(/^\d+_/, '');
             let catHtml = `<div class="menu-section"><h3>${displayCategory}</h3><div class="items-scroll">`;
             let itemInCat = false;
 
             data[cat].forEach(item => {
+                if(!item) return;
                 const displayName = item.n.replace(/^\d+_/, '');
                 if (query && !displayName.toLowerCase().includes(query.toLowerCase())) return;
 
@@ -355,7 +359,7 @@
 
     window.changeQty = (id, amt, name, price) => {
         if (!cart[id]) {
-            cart[id] = { name: name, price: price, qty: 0 };
+            cart[id] = { name: name, price: Number(price), qty: 0 };
         }
         cart[id].qty += amt;
 
@@ -502,7 +506,7 @@
         showDigitalReceipt(name, receiptItemsHtml, total, paymentId);
         window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${orderSummary}`, '_blank');
 
-        cart = {}; updateCartBar(); renderMenu(fullMenuData);
+        cart = {}; updateCartBar();
     }
 
     function showDigitalReceipt(name, itemsHtml, total, paymentId) {
