@@ -12,31 +12,26 @@
         body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 15px; }
         .admin-container { max-width: 500px; margin: auto; display: none; }
         
-        /* Login Screen */
         .login-screen { position: fixed; top:0; left:0; width: 100%; height:100%; background: var(--primary); display: flex; align-items: center; justify-content: center; z-index: 5000; }
         .login-box { background: white; padding: 35px; border-radius: 30px; text-align: center; width: 85%; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
         
         .admin-box { background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid var(--primary); }
         
-        /* Tab Navigation */
         .tab-wrapper { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
         .tab-wrapper::-webkit-scrollbar { display: none; }
         .tab-btn { flex: 0 0 auto; padding: 12px 18px; border: none; background: #eee; border-radius: 15px; cursor: pointer; font-size: 11px; font-weight: 700; text-transform: uppercase; color: #666; transition: 0.3s; }
         .active-tab { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(111, 41, 50, 0.4); }
 
-        /* Forms */
         .admin-input { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #eee; border-radius: 15px; box-sizing: border-box; font-family: 'Poppins'; transition: 0.3s; }
         .admin-input:focus { border-color: var(--primary); outline: none; background: #fffbfb; }
         .btn-save { background: var(--primary); color: white; padding: 16px; border-radius: 18px; border: none; width: 100%; font-weight: 700; cursor: pointer; font-size: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .btn-save:active { transform: scale(0.98); }
 
-        /* Stats Cards */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .stats-card { color: white; text-align: center; padding: 20px; border-radius: 22px; }
         .card-label { font-size: 11px; font-weight: 600; opacity: 0.9; text-transform: uppercase; }
         .card-value { font-size: 32px; font-weight: 700; margin: 5px 0; }
 
-        /* List Items */
         .card { padding: 15px; border-radius: 18px; background: #f9f9f9; border: 1px solid #eee; margin-top: 12px; }
         .preview-card { background: white; padding: 12px; border-radius: 15px; margin-top: 10px; border: 1px solid #eee; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .preview-img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
@@ -75,7 +70,7 @@
             <input type="text" id="newCat" placeholder="Category (e.g. Pancakes)" class="admin-input">
             <input type="text" id="newName" placeholder="Item Name" class="admin-input">
             <input type="number" id="newPrice" placeholder="Price (₹)" class="admin-input">
-            <textarea id="newDesc" placeholder="Item Description (e.g. Premium chocolate blend with topping...)" class="admin-input" rows="3" style="resize: vertical;"></textarea>
+            <textarea id="newDesc" placeholder="Item Description..." class="admin-input" rows="3" style="resize: vertical;"></textarea>
             <input type="file" id="imageFile" class="admin-input" accept="image/*">
             <button class="btn-save" onclick="handleUpload('menu')">Add to Menu</button>
         </div>
@@ -191,35 +186,41 @@
             } else if(type === 'menu') {
                 let inputCat = document.getElementById('newCat').value.trim() || "General";
                 
-                // ഇവിടെയാണ് കാറ്റഗറി ഡ്യൂപ്ലിക്കേഷൻ വരാതിരിക്കാൻ ചെക്ക് ചെയ്യുന്നത്
                 const entireMenuSnap = await db.ref('menu').once('value');
                 const currentMenuData = entireMenuSnap.val() || {};
                 
                 let finalCatPath = inputCat; 
                 
-                // നിലവിലുള്ള കാറ്റഗറികളിൽ ഈ പേര് (1_Pancakes അല്ലെങ്കിൽ വെറും Pancakes) ഉണ്ടോ എന്ന് നോക്കുന്നു
                 for (let existingCat in currentMenuData) {
-                    let cleanExisting = existingCat.replace(/^\d+_/, '').toLowerCase();
-                    let cleanInput = inputCat.replace(/^\d+_/, '').toLowerCase();
+                    let cleanExisting = existingCat.replace(/^\d+_/, '').toLowerCase().trim();
+                    let cleanInput = inputCat.replace(/^\d+_/, '').toLowerCase().trim();
                     
                     if (cleanExisting === cleanInput) {
-                        finalCatPath = existingCat; // ഒരേ പേര് കണ്ടാൽ ആ കാറ്റഗറി പാത്ത് തന്നെ ഉപയോഗിക്കും
+                        finalCatPath = existingCat;
                         break;
                     }
                 }
 
                 const catSnap = await db.ref(`menu/${finalCatPath}`).once('value');
-                let menuList = catSnap.val() || [];
-                const descValue = document.getElementById('newDesc').value.trim();
+                let menuList = catSnap.val();
+                
+                if (!menuList) {
+                    menuList = [];
+                } else if (!Array.isArray(menuList)) {
+                    menuList = Object.values(menuList);
+                }
 
-                menuList.push({ 
-                    n: document.getElementById('newName').value, 
+                const newItem = { 
+                    n: document.getElementById('newName').value.trim(), 
                     p: Number(document.getElementById('newPrice').value), 
                     i: url,
-                    d: descValue
-                });
+                    d: document.getElementById('newDesc').value.trim()
+                };
+
+                menuList.push(newItem);
                 
                 await db.ref(`menu/${finalCatPath}`).set(menuList);
+                
                 document.getElementById('newName').value = '';
                 document.getElementById('newPrice').value = '';
                 document.getElementById('newDesc').value = '';
@@ -230,8 +231,13 @@
             }
             alert("Success!");
             loadLiveItems(type === 'logo' ? 'menu' : type);
-        } catch (e) { alert("Upload Failed"); }
-        finally { btn.innerText = originalText; btn.disabled = false; }
+        } catch (e) { 
+            console.error(e);
+            alert("Upload Failed"); 
+        } finally { 
+            btn.innerText = originalText; 
+            btn.disabled = false; 
+        }
     }
 
     function syncSettings() {
@@ -272,9 +278,12 @@
             } else {
                 for(let cat in data) {
                     if(!data[cat]) continue;
-                    data[cat].forEach((item, i) => {
+                    
+                    let itemsArray = Array.isArray(data[cat]) ? data[cat] : Object.values(data[cat]);
+                    
+                    itemsArray.forEach((item, i) => {
                         if(!item) return;
-                        const itemDesc = item.d ? `<br><small style="color:#777; display:block; margin-top:3px;">📝 ${item.d}</small>` : '';
+                        const itemDesc = item.d ? `<br><small style="color:#777; display:block; margin-top:3px;">Description: ${item.d}</small>` : '';
                         listDiv.innerHTML += `
                             <div class="preview-card" style="align-items: flex-start;">
                                 <img src="${item.i || ''}" class="preview-img" style="width:45px; height:45px;">
@@ -294,7 +303,9 @@
         if(!confirm("Are you sure?")) return;
         const path = type === 'promo' ? 'promos' : `menu/${cat}`;
         const s = await db.ref(path).once('value');
-        let l = s.val(); l.splice(index, 1);
+        let l = s.val();
+        if(!Array.isArray(l)) l = Object.values(l);
+        l.splice(index, 1);
         l.length ? await db.ref(path).set(l) : await db.ref(path).remove();
     }
 
@@ -303,7 +314,7 @@
             const list = document.getElementById('orders-list'); list.innerHTML = '';
             const data = snap.val(); if(!data) { list.innerHTML = "<p>No orders yet.</p>"; return; }
             Object.keys(data).reverse().forEach(id => {
-                list.innerHTML += `<div class="card" style="font-size:12px; line-height:1.6; white-wrap: pre-wrap;">${data[id].items}</div>`;
+                list.innerHTML += `<div class="card" style="font-size:12px; line-height:1.6; white-space: pre-wrap;">${data[id].items}</div>`;
             });
         });
     }
@@ -312,4 +323,4 @@
     function resetStats() { if(confirm("This will clear all visitor counts. Continue?")) db.ref('analytics').remove(); }
 </script>
 </body>
-    </html>
+</html>
